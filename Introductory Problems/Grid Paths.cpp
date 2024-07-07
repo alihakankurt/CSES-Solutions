@@ -18,56 +18,41 @@ inline constexpr i32 Modulus = 1e9 + 7;
 
 u32 FindMatchingPaths(const string& path, vector<vector<bool>>& visited, usize index, u16 y, u16 x)
 {
-    if (y == 6 && x == 0)
+    if ((y == 7 && x == 1) || index == 48)
     {
-        return (index == 48) ? 1 : 0;
-    }
-
-    if (index == 48)
-    {
-        return 0;
-    }
-
-    if ((path[index] == 'U' && y == 0) || (path[index] == 'D' && y == 6))
-    {
-        return 0;
-    }
-
-    if ((path[index] == 'L' && x == 0) || (path[index] == 'R' && x == 6))
-    {
-        return 0;
+        return (y == 7 && x == 1) && index == 48;
     }
 
     u32 positions = 0;
     visited[y][x] = true;
 
-    if ((path[index] == '?' || path[index] == 'U') && y > 0 && !visited[y - 1][x])
+    if ((path[index] == '?' || path[index] == 'U') && !visited[y - 1][x])
     {
-        if (x == 0 || x == 6 || !(y == 1 || visited[y - 2][x]) || (visited[y - 1][x - 1] || visited[y - 1][x + 1]))
+        if (!visited[y - 2][x] || (visited[y - 1][x - 1] || visited[y - 1][x + 1]))
         {
             positions += FindMatchingPaths(path, visited, index + 1, y - 1, x);
         }
     }
 
-    if ((path[index] == '?' || path[index] == 'D') && y < 6 && !visited[y + 1][x])
+    if ((path[index] == '?' || path[index] == 'D') && !visited[y + 1][x])
     {
-        if (x == 0 || x == 6 || !(y == 5 || visited[y + 2][x]) || (visited[y + 1][x - 1] || visited[y + 1][x + 1]))
+        if (!visited[y + 2][x] || (visited[y + 1][x - 1] || visited[y + 1][x + 1]))
         {
             positions += FindMatchingPaths(path, visited, index + 1, y + 1, x);
         }
     }
 
-    if ((path[index] == '?' || path[index] == 'L') && x > 0 && !visited[y][x - 1])
+    if ((path[index] == '?' || path[index] == 'L') && !visited[y][x - 1])
     {
-        if (y == 0 || y == 6 || !(x == 1 || visited[y][x - 2]) || (visited[y - 1][x - 1] || visited[y + 1][x - 1]))
+        if (!visited[y][x - 2] || (visited[y - 1][x - 1] || visited[y + 1][x - 1]))
         {
             positions += FindMatchingPaths(path, visited, index + 1, y, x - 1);
         }
     }
 
-    if ((path[index] == '?' || path[index] == 'R') && x < 6 && !visited[y][x + 1])
+    if ((path[index] == '?' || path[index] == 'R') && !visited[y][x + 1])
     {
-        if (y == 0 || y == 6 || !(x == 5 || visited[y][x + 2]) || (visited[y - 1][x + 1] || visited[y + 1][x + 1]))
+        if (!visited[y][x + 2] || (visited[y - 1][x + 1] || visited[y + 1][x + 1]))
         {
             positions += FindMatchingPaths(path, visited, index + 1, y, x + 1);
         }
@@ -86,8 +71,16 @@ int main(void)
     string path;
     cin >> path;
 
-    auto visited = vector<vector<bool>>(7, vector<bool>(7, false));
-    u32 matches = FindMatchingPaths(path, visited, 0, 0, 0);
+    auto visited = vector<vector<bool>>(9, vector<bool>(9, false));
+    for (usize index = 0; index < 9; index += 1)
+    {
+        visited[index][0] = true;
+        visited[index][8] = true;
+        visited[0][index] = true;
+        visited[8][index] = true;
+    }
+
+    u32 matches = FindMatchingPaths(path, visited, 0, 1, 1);
     cout << matches;
 
     return 0;

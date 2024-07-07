@@ -29,11 +29,11 @@ int main(void)
     {
         u64 square = size * size;
 
-        u64 posibilities = square * (square - 1) / 2;
-        u64 attacks = 4 * (size - 1) * (size - 2);
+        u64 allPositions = square * (square - 1) / 2;
+        u64 attackPositions = 4 * (size - 1) * (size - 2);
 
-        u64 result = posibilities - attacks;
-        cout << result << '\n';
+        u64 safePositions = allPositions - attackPositions;
+        cout << safePositions << '\n';
     }
 
     return 0;

@@ -25,21 +25,15 @@ int main(void)
     u16 n;
     cin >> n;
 
-    vector<u16> codes = {0, 1};
-    for (u16 bit = 1; bit < n; bit += 1)
+    u32 limit = 1 << n;
+    for (u32 num = 0; num < limit; num += 1)
     {
-        for (isize index = codes.size() - 1; index >= 0; index -= 1)
-        {
-            codes.push_back((1 << bit) | codes[index]);
-        }
-    }
-
-    for (u16 code : codes)
-    {
+        u16 code = num ^ (num >> 1);
         for (u16 mask = 1 << (n - 1); mask > 0; mask >>= 1)
         {
             cout << ((code & mask) == mask);
         }
+
         cout << '\n';
     }
 

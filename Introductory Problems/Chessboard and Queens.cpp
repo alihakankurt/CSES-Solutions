@@ -18,7 +18,7 @@ inline constexpr i32 Modulus = 1e9 + 7;
 
 inline constexpr u64 N = 8;
 
-u64 CountPositions(const vector<vector<bool>>& chessboard, vector<bool>& ranks, vector<bool>& files, vector<bool>& leftDiagonal, vector<bool>& rightDiagonal, u64 rank = 1)
+u64 CountPositions(const vector<vector<bool>>& chessboard, vector<bool>& files, vector<bool>& leftDiagonal, vector<bool>& rightDiagonal, u64 rank = 1)
 {
     u64 positions = 0;
     for (u64 file = 1; file <= N; file += 1)
@@ -26,7 +26,7 @@ u64 CountPositions(const vector<vector<bool>>& chessboard, vector<bool>& ranks, 
         u64 leftIndex = rank + (N - file);
         u64 rightIndex = rank + (file - 1);
 
-        if (!chessboard[rank][file] || !ranks[rank] || !files[file] || !leftDiagonal[leftIndex] || !rightDiagonal[rightIndex])
+        if (!chessboard[rank][file] || !files[file] || !leftDiagonal[leftIndex] || !rightDiagonal[rightIndex])
             continue;
 
         if (rank == N)
@@ -35,17 +35,15 @@ u64 CountPositions(const vector<vector<bool>>& chessboard, vector<bool>& ranks, 
             continue;
         }
 
-        ranks[rank] = false;
         files[file] = false;
         leftDiagonal[leftIndex] = false;
         rightDiagonal[rightIndex] = false;
 
-        positions += CountPositions(chessboard, ranks, files, leftDiagonal, rightDiagonal, rank + 1);
+        positions += CountPositions(chessboard, files, leftDiagonal, rightDiagonal, rank + 1);
 
         rightDiagonal[rightIndex] = true;
         leftDiagonal[leftIndex] = true;
         files[file] = true;
-        ranks[rank] = true;
     }
 
     return positions;
@@ -71,10 +69,10 @@ int main(void)
         }
     }
 
-    vector<bool> ranks(N + 1, true), files(N + 1, true);
+    vector<bool> files(N + 1, true);
     vector<bool> leftDiagonal(2 * N, true), rightDiagonal(2 * N, true);
 
-    u64 positions = CountPositions(chessboard, ranks, files, leftDiagonal, rightDiagonal);
+    u64 positions = CountPositions(chessboard, files, leftDiagonal, rightDiagonal);
     cout << positions;
 
     return 0;

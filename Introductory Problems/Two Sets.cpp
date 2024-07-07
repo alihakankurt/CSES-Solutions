@@ -22,10 +22,10 @@ int main(void)
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    usize n;
+    u64 n;
     cin >> n;
 
-    u64 sum = static_cast<u64>(n) * (n + 1) / 2;
+    u64 sum = n * (n + 1) / 2;
 
     if ((sum & 1) == 1)
     {

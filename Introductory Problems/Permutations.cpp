@@ -22,7 +22,7 @@ int main(void)
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    i32 n;
+    u32 n;
     cin >> n;
 
     if (n == 2 || n == 3)
@@ -31,12 +31,12 @@ int main(void)
         return 0;
     }
 
-    for (i32 num = 2; num <= n; num += 2)
+    for (u32 num = 2; num <= n; num += 2)
     {
         cout << num << ' ';
     }
 
-    for (i32 num = 1; num <= n; num += 2)
+    for (u32 num = 1; num <= n; num += 2)
     {
         cout << num << ' ';
     }

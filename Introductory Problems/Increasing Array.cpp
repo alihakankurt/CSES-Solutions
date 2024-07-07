@@ -17,16 +17,6 @@ using f64 = double_t;
 inline constexpr i32 Modulus = 1e9 + 7;
 
 template <typename TScalar, typename... TRest>
-inline constexpr TScalar Min(TScalar first, TRest... rest)
-{
-    static_assert((is_same_v<TScalar, TRest> && ...), "All arguments must have the same type");
-    if constexpr (sizeof...(rest) == 0)
-        return first;
-    else
-        return (first < Min(rest...)) ? first : Min(rest...);
-}
-
-template <typename TScalar, typename... TRest>
 inline constexpr TScalar Max(TScalar first, TRest... rest)
 {
     static_assert((is_same_v<TScalar, TRest> && ...), "All arguments must have the same type");

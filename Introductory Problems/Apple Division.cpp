@@ -22,22 +22,22 @@ int main(void)
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    usize n;
+    u32 n;
     cin >> n;
 
     u64 totalWeight = 0;
     vector<u32> weights(n);
-    for (isize index = 0; index < n; index += 1)
+    for (u32 index = 0; index < n; index += 1)
     {
         cin >> weights[index];
         totalWeight += weights[index];
     }
 
     u64 maxWeight = 0;
-    for (usize mask = 0; mask < (1 << n); mask += 1)
+    for (u32 mask = 0; mask < (1U << n); mask += 1)
     {
         u64 currentWeight = 0;
-        for (usize index = 0; index < n; index += 1)
+        for (u32 index = 0; index < n; index += 1)
         {
             if (((mask >> index) & 1) == 1)
             {
@@ -51,7 +51,8 @@ int main(void)
         }
     }
 
-    cout << totalWeight - 2 * maxWeight;
+    u32 minDifference = totalWeight - 2 * maxWeight;
+    cout << minDifference;
 
     return 0;
 }
