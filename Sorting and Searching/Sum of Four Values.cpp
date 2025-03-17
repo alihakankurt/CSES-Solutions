@@ -1,0 +1,90 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using i8 = int8_t;
+using i16 = int16_t;
+using i32 = int32_t;
+using i64 = int64_t;
+using isize = ptrdiff_t;
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
+using usize = size_t;
+using f32 = float_t;
+using f64 = double_t;
+
+inline constexpr i32 Modulus = 1e9 + 7;
+
+struct Number
+{
+    u32 Value;
+    usize Position;
+
+    bool operator<(const Number& other) const
+    {
+        return Value < other.Value;
+    }
+};
+
+int main(void)
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
+    usize n;
+    cin >> n;
+
+    if (n < 4)
+    {
+        cout << "IMPOSSIBLE";
+        return 0;
+    }
+
+    u32 target;
+    cin >> target;
+
+    vector<Number> nums(n);
+    for (usize index = 0; index < n; index += 1)
+    {
+        u32 num;
+        cin >> num;
+        nums[index] = {num, index + 1};
+    }
+
+    sort(nums.begin(), nums.end());
+
+    for (usize index1 = 0; index1 < n - 3; index1 += 1)
+    {
+        for (usize index2 = index1 + 1; index2 < n - 2; index2 += 1)
+        {
+            u64 preSum = static_cast<u64>(nums[index1].Value) + nums[index2].Value;
+            usize left = index2 + 1, right = n - 1;
+            while (left < right)
+            {
+                u64 sum = preSum + nums[left].Value + nums[right].Value;
+
+                if (sum == target)
+                {
+                    cout << nums[index1].Position << ' ' << nums[index2].Position
+                         << ' ' << nums[left].Position << ' ' << nums[right].Position;
+                    return 0;
+                }
+
+                if (sum < target)
+                {
+                    left += 1;
+                }
+                else
+                {
+                    right -= 1;
+                }
+            }
+        }
+    }
+
+    cout << "IMPOSSIBLE";
+
+    return 0;
+}
