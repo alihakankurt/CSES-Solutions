@@ -160,7 +160,7 @@ The main difference between this problem and the previous one is that the number
 This problem can be solved by the same approach of `Subarray Sums II` but instead of working with prefix sum, we keep track of the remainder of the prefix sum. And by updating the hash map that we used to store the count of the remainders, we can get the number of subarrays that have the same remainder as the current prefix sum, and then we can use it to update our answer.
 
 
-## [Subarray Distinct Values](https://cses.fi/problemset/task/2428)
+## [Distinct Values Subarrays II](https://cses.fi/problemset/task/2428)
 
 For this problem, we can simply use the two-pointer technique and store the values in our subarray in a map with their number of occurrences. On every iteration, if our subarray has more distinct values than `k`, we can remove the numbers from the start until the subarray has less than or equal distinct values from `k`. At the end, we add the length of the subarray to the answer.
 

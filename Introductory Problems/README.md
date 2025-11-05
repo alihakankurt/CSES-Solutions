@@ -141,7 +141,7 @@ If we look at the numbers with `1` digits, there are `9` numbers with `1` digits
 First, we need to find the range of the numbers that have the same digit count as the `k`-th digit. Then, we can find the target number by dividing the `k` with the digit count and adding the first number in the range. Finally, we can find the `k`-th digit of the digit string by dividing and modulo operations on the target number.
 
 
-## [Grid Paths](https://cses.fi/problemset/task/1625)
+## [Grid Path Description](https://cses.fi/problemset/task/1625)
 
 Similar to the `Chessboard and Queens` problem, we can use a Depth-First Search function to count each valid paths from top-left corner to the bottom-left corner.
 
