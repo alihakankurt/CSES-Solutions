@@ -1,6 +1,6 @@
 # CSES Solutions
 
-The repository contains solutions to the problems on [CSES](https://cses.fi/problemset/). The solutions are written in C++ 17.
+This repository contains my solutions to the [CSES Problemset](https://cses.fi/problemset/), written in C++ 17. You can visit the web view from [here](https://alihakankurt.github.io/CSES-Solutions).
 
 ## License
 
