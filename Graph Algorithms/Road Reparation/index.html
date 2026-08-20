@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Road Reparation</title>
+        <link rel="stylesheet" href="/CSES-Solutions/style.css" />
+        <script src="/CSES-Solutions/script.js"></script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+    <script src="/CSES-Solutions/highlight.js"></script>
+
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="navbar-start">
+                <a href="/CSES-Solutions">
+                    <span class="navbar-home">CSES Solutions</span>
+                </a>
+            </div>
+            <div class="navbar-end">
+                <select id="theme-select" class="navbar-select">
+                    <option value="theme-rp">Rosé Pine</option>
+                    <option value="theme-rp-moon">Rosé Pine Moon</option>
+                    <option value="theme-rp-dawn">Rosé Pine Dawn</option>
+                </select>
+                <a
+                    href="https://github.com/alihakankurt/CSES-Solutions"
+                    target="_blank"
+                    class="navbar-link"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                    >
+                        <path
+                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"
+                        />
+                    </svg>
+                </a>
+            </div>
+        </nav>
+        <main>
+            <div class="container">
+                <h3 class="problem-title">
+                    <a href="https://cses.fi/problemset/task/1675">Graph Algorithms / Road Reparation</a>
+                </h3>
+                <div class="problem-code-block">
+                    <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
+using usize = size_t;
+using uptr = uintptr_t;
+
+using i8 = int8_t;
+using i16 = int16_t;
+using i32 = int32_t;
+using i64 = int64_t;
+using isize = make_signed_t&lt;size_t&gt;;
+using iptr = intptr_t;
+
+using f32 = float_t;
+using f64 = double_t;
+
+constexpr i32 Modulus = 1e9 + 7;
+
+template &lt;typename T&gt;
+class DisjointSet
+{
+    vector&lt;T&gt; _sizes;
+    vector&lt;T&gt; _parents;
+
+  public:
+    explicit DisjointSet(usize n)
+    {
+        _sizes.resize(n, 1);
+        _parents.resize(n);
+        iota(_parents.begin(), _parents.end(), T{});
+    }
+
+    T Find(T node)
+    {
+        while (node != _parents[node])
+        {
+            _parents[node] = _parents[_parents[node]];
+            node = _parents[node];
+        }
+
+        return node;
+    }
+
+    void Unite(T node1, T node2)
+    {
+        node1 = Find(node1);
+        node2 = Find(node2);
+
+        if (node1 == node2)
+        {
+            return;
+        }
+
+        if (_sizes[node1] &lt; _sizes[node2])
+        {
+            swap(node1, node2);
+        }
+
+        _sizes[node1] += _sizes[node2];
+        _parents[node2] = node1;
+    }
+
+    T GetSize(T node)
+    {
+        return _sizes[Find(node)];
+    }
+
+    bool IsConnected(T node1, T node2)
+    {
+        return Find(node1) == Find(node2);
+    }
+};
+
+struct Road
+{
+    u32 From;
+    u32 To;
+    u32 Cost;
+
+    bool operator&lt;(const Road&amp; other) const
+    {
+        return Cost &lt; other.Cost;
+    }
+};
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
+    u32 n, m;
+    cin &gt;&gt; n &gt;&gt; m;
+
+    auto roads = vector&lt;Road&gt;(m);
+    for (usize i = 0; i &lt; m; ++i)
+    {
+        u32 from, to, cost;
+        cin &gt;&gt; from &gt;&gt; to &gt;&gt; cost;
+        roads[i] = {from, to, cost};
+    }
+
+    sort(roads.begin(), roads.end());
+
+    DisjointSet&lt;u32&gt; dsu(n + 1);
+
+    u64 answer = 0;
+    for (const auto&amp; road : roads)
+    {
+        if (!dsu.IsConnected(road.From, road.To))
+        {
+            dsu.Unite(road.From, road.To);
+            answer += road.Cost;
+        }
+    }
+
+    if (dsu.GetSize(1) == n)
+    {
+        cout &lt;&lt; answer;
+    }
+    else
+    {
+        cout &lt;&lt; &quot;IMPOSSIBLE&quot;;
+    }
+
+    return 0;
+}
+
+                    </code></pre>
+                </div>
+            </div>
+</main>
+        <footer class="copyright-footer">
+            &copy; 2025
+            <a href="https://github.com/alihakankurt" target="_blank"
+                >Ali Hakan Kurt</a
+            >
+        </footer>
+    </body>
+</html>

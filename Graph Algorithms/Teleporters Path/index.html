@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Teleporters Path</title>
+        <link rel="stylesheet" href="/CSES-Solutions/style.css" />
+        <script src="/CSES-Solutions/script.js"></script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+    <script src="/CSES-Solutions/highlight.js"></script>
+
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="navbar-start">
+                <a href="/CSES-Solutions">
+                    <span class="navbar-home">CSES Solutions</span>
+                </a>
+            </div>
+            <div class="navbar-end">
+                <select id="theme-select" class="navbar-select">
+                    <option value="theme-rp">Rosé Pine</option>
+                    <option value="theme-rp-moon">Rosé Pine Moon</option>
+                    <option value="theme-rp-dawn">Rosé Pine Dawn</option>
+                </select>
+                <a
+                    href="https://github.com/alihakankurt/CSES-Solutions"
+                    target="_blank"
+                    class="navbar-link"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                    >
+                        <path
+                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"
+                        />
+                    </svg>
+                </a>
+            </div>
+        </nav>
+        <main>
+            <div class="container">
+                <h3 class="problem-title">
+                    <a href="https://cses.fi/problemset/task/1693">Graph Algorithms / Teleporters Path</a>
+                </h3>
+                <div class="problem-code-block">
+                    <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
+using usize = size_t;
+using uptr = uintptr_t;
+
+using i8 = int8_t;
+using i16 = int16_t;
+using i32 = int32_t;
+using i64 = int64_t;
+using isize = make_signed_t&lt;size_t&gt;;
+using iptr = intptr_t;
+
+using f32 = float_t;
+using f64 = double_t;
+
+constexpr i32 Modulus = 1e9 + 7;
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
+    u32 n, m;
+    cin &gt;&gt; n &gt;&gt; m;
+
+    auto graph = vector&lt;vector&lt;u32&gt;&gt;(n + 1u);
+    auto indegree = vector&lt;u32&gt;(n + 1u, 0u);
+    auto outdegree = vector&lt;u32&gt;(n + 1u, 0u);
+    for (u32 i = 0u; i &lt; m; ++i)
+    {
+        u32 a, b;
+        cin &gt;&gt; a &gt;&gt; b;
+        graph[a].push_back(b);
+        ++indegree[b];
+        ++outdegree[a];
+    }
+
+    for (u32 u = 2u; u &lt; n; ++u)
+    {
+        if (indegree[u] != outdegree[u])
+        {
+            cout &lt;&lt; &quot;IMPOSSIBLE&quot;;
+            return 0;
+        }
+    }
+
+    if (indegree[1u] + 1u != outdegree[1u] || indegree[n] != outdegree[n] + 1u)
+    {
+        cout &lt;&lt; &quot;IMPOSSIBLE&quot;;
+        return 0;
+    }
+
+    auto path = vector&lt;u32&gt;();
+
+    auto st = stack&lt;u32&gt;({1u});
+    while (!st.empty())
+    {
+        u32 u = st.top();
+
+        if (graph[u].empty())
+        {
+            path.push_back(u);
+            st.pop();
+            continue;
+        }
+
+        st.push(graph[u].back());
+        graph[u].pop_back();
+    }
+
+    if (path.size() != m + 1u)
+    {
+        cout &lt;&lt; &quot;IMPOSSIBLE&quot;;
+        return 0;
+    }
+
+    for (auto it = path.rbegin(); it != path.rend(); ++it)
+    {
+        cout &lt;&lt; *it &lt;&lt; &#x27; &#x27;;
+    }
+
+    return 0;
+}
+
+                    </code></pre>
+                </div>
+            </div>
+</main>
+        <footer class="copyright-footer">
+            &copy; 2025
+            <a href="https://github.com/alihakankurt" target="_blank"
+                >Ali Hakan Kurt</a
+            >
+        </footer>
+    </body>
+</html>
