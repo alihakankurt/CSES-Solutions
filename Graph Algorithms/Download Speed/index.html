@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Download Speed</title>
+        <link rel="stylesheet" href="/CSES-Solutions/style.css" />
+        <script src="/CSES-Solutions/script.js"></script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+    <script src="/CSES-Solutions/highlight.js"></script>
+
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="navbar-start">
+                <a href="/CSES-Solutions">
+                    <span class="navbar-home">CSES Solutions</span>
+                </a>
+            </div>
+            <div class="navbar-end">
+                <select id="theme-select" class="navbar-select">
+                    <option value="theme-rp">Rosé Pine</option>
+                    <option value="theme-rp-moon">Rosé Pine Moon</option>
+                    <option value="theme-rp-dawn">Rosé Pine Dawn</option>
+                </select>
+                <a
+                    href="https://github.com/alihakankurt/CSES-Solutions"
+                    target="_blank"
+                    class="navbar-link"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                    >
+                        <path
+                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"
+                        />
+                    </svg>
+                </a>
+            </div>
+        </nav>
+        <main>
+            <div class="container">
+                <h3 class="problem-title">
+                    <a href="https://cses.fi/problemset/task/1694">Graph Algorithms / Download Speed</a>
+                </h3>
+                <div class="problem-code-block">
+                    <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
+using usize = size_t;
+using uptr = uintptr_t;
+
+using i8 = int8_t;
+using i16 = int16_t;
+using i32 = int32_t;
+using i64 = int64_t;
+using isize = make_signed_t&lt;size_t&gt;;
+using iptr = intptr_t;
+
+using f32 = float_t;
+using f64 = double_t;
+
+constexpr i32 Modulus = 1e9 + 7;
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
+    u16 n, m;
+    cin &gt;&gt; n &gt;&gt; m;
+
+    auto graph = vector&lt;vector&lt;u16&gt;&gt;(n + 1u);
+    auto capacity = vector&lt;vector&lt;u64&gt;&gt;(n + 1u, vector&lt;u64&gt;(n + 1u, 0u));
+    while (m--)
+    {
+        u16 a, b;
+        u64 c;
+        cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;
+        graph[a].push_back(b);
+        graph[b].push_back(a);
+        capacity[a][b] += c;
+    }
+
+    auto parent = vector&lt;u16&gt;(n + 1u);
+
+    function&lt;u64()&gt; bfs = [&amp;]() {
+        fill(parent.begin(), parent.end(), 0u);
+        parent[1u] = 1u;
+
+        queue&lt;pair&lt;u16, u64&gt;&gt; qu;
+        qu.emplace(1u, numeric_limits&lt;u64&gt;::max());
+
+        while (!qu.empty())
+        {
+            auto [u, flow] = qu.front();
+            qu.pop();
+
+            for (u16 v : graph[u])
+            {
+                if (parent[v] == 0u &amp;&amp; capacity[u][v] &gt; 0u)
+                {
+                    parent[v] = u;
+                    u64 nflow = min(flow, capacity[u][v]);
+                    if (v == n) return nflow;
+                    qu.emplace(v, nflow);
+                }
+            }
+        }
+
+        return static_cast&lt;u64&gt;(0u);
+    };
+
+    u64 answer = 0u;
+    while (u64 flow = bfs())
+    {
+        answer += flow;
+        u16 v = n;
+        while (v != 1u)
+        {
+            u16 u = parent[v];
+            capacity[u][v] -= flow;
+            capacity[v][u] += flow;
+            v = u;
+        }
+    }
+
+    cout &lt;&lt; answer;
+
+    return 0;
+}
+
+                    </code></pre>
+                </div>
+            </div>
+</main>
+        <footer class="copyright-footer">
+            &copy; 2025
+            <a href="https://github.com/alihakankurt" target="_blank"
+                >Ali Hakan Kurt</a
+            >
+        </footer>
+    </body>
+</html>
